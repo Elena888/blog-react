@@ -1,0 +1,16 @@
+body{
+    background-color: #fafafa;
+    background-image: url("https://www.transparenttextures.com/patterns/az-subtle.png");
+}
+.header{
+    padding: 15px 0;
+    background: #434b52;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0,0.3);
+}
+.header a{
+    color: #fff;
+    text-transform: uppercase;
+}
+.inner-content{
+    padding: 50px 0;
+}

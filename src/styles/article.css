@@ -1,0 +1,52 @@
+.article-content{
+    background: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 25px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+.article-content h3{
+    font-size: 30px;
+    color: #17a2b8;
+}
+.article-author h6{
+    font-weight: normal;
+    font-style: italic;
+    color: #087384;
+    font-size: 14px;
+}
+.article-author h6 span{
+    color: #adb5bd;
+}
+h4{
+    width: 80%;
+}
+h4 a{
+    color: #6ab0bb;
+}
+h4 a:hover{
+    color: #10a2bb;
+}
+.art-buttons{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.art-buttons a{
+    margin: 0 5px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    display: inline-block;
+    text-align: center;
+    line-height: 28px;
+    background: #eee;
+}
+.art-buttons a .fa-pen{
+    color: #17a2b8;
+}
+.art-buttons a .fa-times{
+    color: #b71717;
+}
