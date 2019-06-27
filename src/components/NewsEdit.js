@@ -22,10 +22,7 @@ function filter(arr) {
 
         var symbols =  ["." , "#" , "$" , "[" , "]"]
         for(var j = 0; j < symbols.length; j++){
-            console.log('arr[i]', arr[i])
-            //console.log('symbols[i]', symbols[i])
             if(arr[i] === symbols[j]){
-
                 arr.splice(i, 1);
                 i--;
             }
@@ -39,7 +36,7 @@ class NewsEdit extends React.Component{
         this.state = {
             title: this.props.article.title,
             content: this.props.article.content,
-            userName: this.props.article.userName,
+            userName: this.props.name,
             timestamp: this.props.article.timestamp,
             articleId: this.props.article.articleId,
             formErrors: []
@@ -47,21 +44,40 @@ class NewsEdit extends React.Component{
     }
     componentDidMount(){
         this.props.fetchArticle(this.props.match.params.id)
-        console.log("NEW STATE", this.state)
     }
 
     componentDidUpdate(prevProps) {
-        console.log('prebstate', this.props.article.title)
-       /* if(prevProps.article.articleId.title !== this.props.article.title) {
+        /*console.log('prevstate', prevProps)
+        console.log('this.props', this.props)*/
+        if(prevProps.article.title !== this.props.article.title) {
             this.setState({
                 title: this.props.article.title
+            })
+        }
+        if(prevProps.article.content !== this.props.article.content) {
+            this.setState({
+                content: this.props.article.content
+            })
+        }
+        if(prevProps.article.articleId !== this.props.article.articleId) {
+            this.setState({
+                articleId: this.props.article.articleId
+            })
+        }
+        if(prevProps.article.timestamp !== this.props.article.timestamp) {
+            this.setState({
+                timestamp: this.props.article.timestamp
+            })
+        }
+        /*if(prevProps.article.userName !== this.props.name) {
+            this.setState({
+                userName: this.props.name
             })
         }*/
     }
 
     handleSubmit = (event) => {
         event.preventDefault();
-        //console.log(this.state.formErrors);
         const { title, content } = this.state;
 
         const formErrors = validate(title, content);
@@ -85,8 +101,6 @@ class NewsEdit extends React.Component{
         let generateId = value.split(' ');
         generateId = filter(generateId);
         generateId = generateId.join('-') + '-' + Math.random().toString(36).substr(2, 5)
-
-        console.log(generateId)
         this.setState({
             title: value,
             articleId: generateId
@@ -104,7 +118,6 @@ class NewsEdit extends React.Component{
         if(!this.props.article){
             return <div>Loading...</div>
         }
-        console.log('props', this.props.article)
         return(
             <FormArticle
                 title={this.state.title}
@@ -118,9 +131,9 @@ class NewsEdit extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
-    console.log('STATE', state.news)
     return{
-        article: state.news
+        article: state.article,
+        name: state.auth.user.name
     }
 };
 

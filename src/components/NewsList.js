@@ -38,7 +38,6 @@ class NewsList extends React.Component{
                             <h6>{value.userName}  <span>{value.timestamp}</span></h6>
                         </div>
                         <p>{this.truncate(value.content, 50, '...')}</p>
-
                     </div>
                 </div>
             );

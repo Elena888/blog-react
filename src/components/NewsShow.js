@@ -5,6 +5,7 @@ import {fetchArticle} from '../actions/index'
 class NewsShow extends React.Component{
     componentDidMount(){
         this.props.fetchArticle(this.props.match.params.id)
+        console.log(this.props)
     }
     render(){
         if(!this.props.article){
@@ -30,8 +31,9 @@ class NewsShow extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
+    console.log('state', state.article)
     return{
-        article: state.news
+        article: state.article
     }
 };
 

@@ -19,11 +19,9 @@ export const fetchNews = () => async dispatch => {
     databaseRef.ref('news').orderByChild('timestamp').on('value',
         function (snapshot) {
             let data = [];
-
             snapshot.forEach(function(child) {
                 data.unshift(child.val());
-            })
-            //console.log('value', snapshot.val())
+            });
             dispatch({
                 type: FETCH_NEWS,
                 payload: data
@@ -45,7 +43,7 @@ export const fetchArticle = (articleId) => async dispatch => {
     databaseRef.ref(`news/${articleId}`).once('value')
         .then(function (snapshot) {
             let data = snapshot.val();
-            console.log('data', data)
+            //console.log('data', data)
             dispatch({
                 type: FETCH_ARTICLE,
                 payload: data
@@ -55,8 +53,15 @@ export const fetchArticle = (articleId) => async dispatch => {
 };
 
 export const editArticle = (articleId, newArticle) => async dispatch => {
+    var updates = {};
+    var newPostKey = databaseRef.ref().child('news').push().key;
+    updates['news/' + newPostKey] = newArticle
+
+    console.log('UPDATES',updates)
+    console.log('Child',databaseRef.ref('news/' + articleId).update(newArticle))
+    console.log(newArticle)
     dispatch({
         type: EDIT_ARTICLE,
-        payload: databaseRef.ref('news/' + articleId).set(newArticle)
+        payload: databaseRef.ref('news/test-6o188').update(newArticle)
     });
 };
