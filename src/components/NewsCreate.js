@@ -18,10 +18,8 @@ function filter(arr) {
     for(var i = 0; i < arr.length; i++){
         var symbols =  ["." , "#" , "$" , "[" , "]"]
         for(var j = 0; j < symbols.length; j++){
-            console.log('arr[i]', arr[i])
             //console.log('symbols[i]', symbols[i])
             if(arr[i] === symbols[j]){
-
                 arr.splice(i, 1);
                 i--;
             }

@@ -1,6 +1,6 @@
 import {databaseRef} from "../config/fbConfig";
 import history from '../history'
-import {ADD_ARTICLE, FETCH_NEWS, FETCH_ARTICLE, SIGN_IN, SIGN_OUT, EDIT_ARTICLE} from "./types";
+import {ADD_ARTICLE, FETCH_NEWS, FETCH_ARTICLE, SIGN_IN, SIGN_OUT, EDIT_ARTICLE, DELETE_ARTICLE} from "./types";
 
 export const Sign_In = (user) => {
     return {
@@ -53,15 +53,14 @@ export const fetchArticle = (articleId) => async dispatch => {
 };
 
 export const editArticle = (articleId, newArticle) => async dispatch => {
-    var updates = {};
-    var newPostKey = databaseRef.ref().child('news').push().key;
-    updates['news/' + newPostKey] = newArticle
-
-    console.log('UPDATES',updates)
-    console.log('Child',databaseRef.ref('news/' + articleId).update(newArticle))
-    console.log(newArticle)
     dispatch({
         type: EDIT_ARTICLE,
-        payload: databaseRef.ref('news/test-6o188').update(newArticle)
+        payload: databaseRef.ref('news/' + articleId).set(newArticle)
+    });
+};
+export const deleteArticle = (articleId) => async dispatch => {
+    dispatch({
+        type: DELETE_ARTICLE,
+        payload: databaseRef.ref('news/' + articleId).remove()
     });
 };

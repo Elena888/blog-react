@@ -1,6 +1,7 @@
 import React from 'react'
+import history from '../history'
 import {connect} from 'react-redux'
-import {editArticle, fetchArticle} from "../actions";
+import {editArticle, deleteArticle, fetchArticle} from "../actions";
 import FormArticle from './formArticle'
 
 function validate(title, content) {
@@ -41,14 +42,13 @@ class NewsEdit extends React.Component{
             articleId: this.props.article.articleId,
             formErrors: []
         };
+
     }
     componentDidMount(){
         this.props.fetchArticle(this.props.match.params.id)
     }
 
     componentDidUpdate(prevProps) {
-        /*console.log('prevstate', prevProps)
-        console.log('this.props', this.props)*/
         if(prevProps.article.title !== this.props.article.title) {
             this.setState({
                 title: this.props.article.title
@@ -80,6 +80,7 @@ class NewsEdit extends React.Component{
         event.preventDefault();
         const { title, content } = this.state;
 
+
         const formErrors = validate(title, content);
 
         if (Object.keys(formErrors).length > 0) {
@@ -93,7 +94,20 @@ class NewsEdit extends React.Component{
             timestamp: this.state.timestamp,
             articleId: this.state.articleId
         };
-        this.props.editArticle(newsData.articleId, newsData)
+        //this.props.editArticle(newsData.articleId, newsData)
+
+        if(this.props.article.title === title)
+        {
+            //console.log("handleSubmit this.props.article.title === title");
+            this.props.editArticle(newsData.articleId, newsData )
+
+        }
+        else{//title is different
+            //console.log("handleSubmit this.props.article.title !== title");
+            this.props.deleteArticle(this.props.article.articleId)
+            this.props.editArticle(newsData.articleId, newsData )
+            history.push(`/news/${newsData.articleId}/edit`)
+        }
     };
 
     handleChangeTitle = (event) => {
@@ -104,7 +118,8 @@ class NewsEdit extends React.Component{
         this.setState({
             title: value,
             articleId: generateId
-        })
+        });
+        console.log('handleTitle',this.state.title)
     };
     handleChangeContent = (event) => {
         const value = event.target.value;
@@ -118,6 +133,7 @@ class NewsEdit extends React.Component{
         if(!this.props.article){
             return <div>Loading...</div>
         }
+        console.log('render Title',this.state.title)
         return(
             <FormArticle
                 title={this.state.title}
@@ -137,4 +153,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps, {editArticle, fetchArticle})(NewsEdit)
+export default connect(mapStateToProps, {editArticle, deleteArticle, fetchArticle})(NewsEdit)

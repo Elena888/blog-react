@@ -5,13 +5,11 @@ import {fetchArticle} from '../actions/index'
 class NewsShow extends React.Component{
     componentDidMount(){
         this.props.fetchArticle(this.props.match.params.id)
-        console.log(this.props)
     }
     render(){
         if(!this.props.article){
             return <div>Loading...</div>
         }
-        console.log('article', this.props.article)
         const {title, content, userName, timestamp} =  this.props.article
         return(
             <div className="container">
@@ -31,7 +29,6 @@ class NewsShow extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
-    console.log('state', state.article)
     return{
         article: state.article
     }
