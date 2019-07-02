@@ -1,6 +1,6 @@
 import {databaseRef} from "../config/fbConfig";
 import history from '../history'
-import {ADD_ARTICLE, FETCH_NEWS, FETCH_ARTICLE, SIGN_IN, SIGN_OUT, EDIT_ARTICLE, DELETE_ARTICLE} from "./types";
+import {CREATE_ARTICLE, FETCH_NEWS, FETCH_ARTICLE, SIGN_IN, SIGN_OUT, EDIT_ARTICLE, DELETE_ARTICLE} from "./types";
 
 export const Sign_In = (user) => {
     return {
@@ -30,16 +30,16 @@ export const fetchNews = () => async dispatch => {
     );
 };
 
-export const addNews = (articleId,newArticle) => async (dispatch) => {
+export const createArticle = (articleId,newArticle) => async (dispatch) => {
     databaseRef.ref('news/' + articleId)
         .set(newArticle)
         .then(() => {
                 dispatch({
-                    type: ADD_ARTICLE,
+                    type: CREATE_ARTICLE,
                     payload: newArticle
                 })
             }
-        )
+        );
     history.push('/')
 };
 
@@ -57,14 +57,20 @@ export const fetchArticle = (articleId) => async dispatch => {
 
 export const editArticle = (articleId, newArticle) => async dispatch => {
     databaseRef.ref('news/' + articleId)
-                .set(newArticle)
-                .then(() => {
-                    dispatch({
-                        type: EDIT_ARTICLE,
-                        payload: newArticle
-                    })
-                }
-    )
+        .set(newArticle)
+        .then(() => {
+                dispatch({
+                    type: EDIT_ARTICLE,
+                    payload: newArticle
+                })
+            },
+            (error) => {
+                dispatch({
+                    type: EDIT_ARTICLE,
+                    payload: error
+                })
+            }
+        )
 };
 export const deleteArticle = (articleId) => async dispatch => {
     databaseRef.ref('news/' + articleId)

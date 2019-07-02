@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {Sign_In, addNews} from '../actions/index'
+import {Sign_In, createArticle} from '../actions/index'
 import FormArticle from './formArticle'
 
 function validate(title, content) {
@@ -56,7 +56,7 @@ class NewsCreate extends React.Component{
             timestamp: this.state.timestamp,
             articleId: this.state.articleId
         };
-        this.props.addNews(newsData.articleId, newsData)
+        this.props.createArticle(newsData.articleId, newsData)
     };
 
     handleChangeTitle = (event) => {
@@ -98,4 +98,4 @@ const mapStateToProps = (state) => {
         userId: state.auth.user.userId
     }
 };
-export default connect(mapStateToProps, {Sign_In, addNews})(NewsCreate)
+export default connect(mapStateToProps, {Sign_In, createArticle})(NewsCreate)

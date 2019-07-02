@@ -1,7 +1,7 @@
 import React from 'react'
 import history from '../history'
 import {connect} from 'react-redux'
-import {editArticle, deleteArticle, fetchArticle} from "../actions";
+import {editArticle, deleteArticle, createArticle, fetchArticle} from "../actions";
 import FormArticle from './formArticle'
 
 function validate(title, content) {
@@ -36,9 +36,10 @@ class NewsEdit extends React.Component{
             content: this.props.article.content,
             userName: this.props.name,
             userId: this.props.userId,
-            timestamp: this.props.article.timestamp,
+            timestamp: new Date(Date.now()).toLocaleString(),
             articleId: this.props.article.articleId,
-            formErrors: []
+            formErrors: [],
+            submitMessage: ''
         };
         console.log('Constructor', this.state)
     }
@@ -49,12 +50,11 @@ class NewsEdit extends React.Component{
 
     componentDidUpdate(prevProps) {
         if(prevProps.article !== this.props.article) {
-            const {title, content, articleId, timestamp} = this.props.article;
+            const {title, content, articleId} = this.props.article;
             this.setState({
                 title,
                 content,
-                articleId,
-                timestamp
+                articleId
             })
         }
         console.log('componentDidUpdate', this.state)
@@ -94,8 +94,16 @@ class NewsEdit extends React.Component{
         const formErrors = validate(title, content);
 
         if (Object.keys(formErrors).length > 0) {
-            this.setState({formErrors});
+            this.setState({
+                formErrors,
+                submitMessage: ''
+            });
             return;
+        }else{
+            this.setState({
+                formErrors: [],
+                submitMessage: 'You successfully edited article'
+            });
         }
         let newsData = {
             title: this.state.title,
@@ -116,9 +124,10 @@ class NewsEdit extends React.Component{
         else{//title is different
             //console.log("handleSubmit this.props.article.title !== title");
             this.props.deleteArticle(this.props.article.articleId)
-            this.props.editArticle(newsData.articleId, newsData )
+            this.props.createArticle(newsData.articleId, newsData )
             history.push(`/news/${newsData.articleId}/edit`)
         }
+
         console.log('handleSubmit', this.state)
     };
 
@@ -149,6 +158,7 @@ class NewsEdit extends React.Component{
         }
         console.log('render',this.state)
         return(
+            <React.Fragment>
             <FormArticle
                 title={this.state.title}
                 content={this.state.content}
@@ -157,6 +167,14 @@ class NewsEdit extends React.Component{
                 handleChangeContent={this.handleChangeContent}
                 handleChangeTitle={this.handleChangeTitle}
             />
+                {this.state.submitMessage &&
+                    <div className="container">
+                        <div className="row" style={{marginTop: '30px'}}>
+                            <h5 className="alert alert-success">{this.state.submitMessage}</h5>
+                        </div>
+                    </div>
+                }
+            </React.Fragment>
         )
     }
 }
@@ -169,4 +187,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps, {editArticle, deleteArticle, fetchArticle})(NewsEdit)
+export default connect(mapStateToProps, {editArticle, deleteArticle, createArticle, fetchArticle})(NewsEdit)
