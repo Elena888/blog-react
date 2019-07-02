@@ -28,14 +28,18 @@ export const fetchNews = () => async dispatch => {
             })
         }
     );
-
 };
 
 export const addNews = (articleId,newArticle) => async (dispatch) => {
-    dispatch({
-        type: ADD_ARTICLE,
-        payload: databaseRef.ref('news/' + articleId).set(newArticle)
-    });
+    databaseRef.ref('news/' + articleId)
+        .set(newArticle)
+        .then(() => {
+                dispatch({
+                    type: ADD_ARTICLE,
+                    payload: newArticle
+                })
+            }
+        )
     history.push('/')
 };
 
@@ -49,18 +53,25 @@ export const fetchArticle = (articleId) => async dispatch => {
                 payload: data
             })
         });
-
 };
 
 export const editArticle = (articleId, newArticle) => async dispatch => {
-    dispatch({
-        type: EDIT_ARTICLE,
-        payload: databaseRef.ref('news/' + articleId).set(newArticle)
-    });
+    databaseRef.ref('news/' + articleId)
+                .set(newArticle)
+                .then(() => {
+                    dispatch({
+                        type: EDIT_ARTICLE,
+                        payload: newArticle
+                    })
+                }
+    )
 };
 export const deleteArticle = (articleId) => async dispatch => {
-    dispatch({
-        type: DELETE_ARTICLE,
-        payload: databaseRef.ref('news/' + articleId).remove()
-    });
+    databaseRef.ref('news/' + articleId)
+        .remove()
+        .then(() => {
+            dispatch({
+                type: DELETE_ARTICLE
+            });
+        })
 };

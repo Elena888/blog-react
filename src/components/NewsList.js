@@ -2,13 +2,11 @@ import React from 'react'
 import _ from "lodash";
 import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
-import {fetchNews} from '../actions/index'
+import {fetchNews, fetchArticle} from '../actions/index'
+import NewsDelete from './NewsDelete'
 import '../styles/article.css'
 
 class NewsList extends React.Component{
-    componentDidMount() {
-        this.props.fetchNews();
-    }
     truncate = (elem, limit, after) => {
         if (!elem || !limit) return;
         var content = elem.trim();
@@ -17,7 +15,23 @@ class NewsList extends React.Component{
         elem = content;
         return elem;
     };
+
+    state = {
+        showPopup: false
+    };
+    togglePopup = (articleId) => {
+        this.setState({
+            showPopup: !this.state.showPopup
+        })
+    };
+    componentDidMount() {
+        this.props.fetchNews();
+    }
+
     renderNews() {
+        console.log('Render')
+        console.log('PROPS', this.props.news)
+        console.log('State', this.state)
         const { news } = this.props;
         const allNews = _.map(news, (value, key) => {
             return (
@@ -27,9 +41,20 @@ class NewsList extends React.Component{
                             <Link to={`/news/${value.articleId}/edit`}>
                                 <i className="fas fa-pen"></i>
                             </Link>
-                            <Link to={`/news/${value.articleId}/delete`}>
+                            {/*<Link to={`/news/${value.articleId}/delete`}>
                                 <i className="fa fa-times" aria-hidden="true"></i>
-                            </Link>
+                            </Link>*/}
+                            <button onClick={() => this.togglePopup(value.articleId)}>
+                                <i className="fa fa-times" aria-hidden="true"></i>
+                            </button>
+
+                            {this.state.showPopup ?
+                                <NewsDelete articleId={value.articleId}
+                                            closePopup={() => this.togglePopup(value.articleId)}/>
+                                :
+                                null
+
+                            }
                         </div>
                         <h4>
                             <Link to={`/news/${value.articleId}`}>{value.title}</Link>
@@ -72,4 +97,4 @@ const mapStateToProps = (state) => {
         isSignedIn: state.auth.isSignedIn
     };
 };
-export default connect(mapStateToProps, {fetchNews})(NewsList)
+export default connect(mapStateToProps, {fetchNews, fetchArticle})(NewsList)

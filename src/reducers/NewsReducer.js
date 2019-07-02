@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import {ADD_ARTICLE, EDIT_ARTICLE, FETCH_ARTICLE, FETCH_NEWS} from "../actions/types";
+import {ADD_ARTICLE, DELETE_ARTICLE, EDIT_ARTICLE, FETCH_ARTICLE, FETCH_NEWS} from "../actions/types";
 const initialState = {
         content: '',
         timestamp: '',
@@ -26,6 +26,8 @@ export const article =  (state = initialState, action) => {
         case EDIT_ARTICLE:
             //console.log('edit', action.payload)
             return action.payload;
+        case DELETE_ARTICLE:
+            return state;
         default:
             return state;
     }

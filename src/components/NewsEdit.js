@@ -5,8 +5,6 @@ import {editArticle, deleteArticle, fetchArticle} from "../actions";
 import FormArticle from './formArticle'
 
 function validate(title, content) {
-    // we are going to store errors for all fields
-    // in a single array
     const errors = [];
     if (title.length === 0) {
         errors.title = 'Title can\'t be empty';
@@ -18,7 +16,6 @@ function validate(title, content) {
     return errors;
 }
 function filter(arr) {
-
     for(var i = 0; i < arr.length; i++){
 
         var symbols =  ["." , "#" , "$" , "[" , "]"]
@@ -42,14 +39,25 @@ class NewsEdit extends React.Component{
             articleId: this.props.article.articleId,
             formErrors: []
         };
-
+        console.log('Constructor', this.state)
     }
     componentDidMount(){
-        this.props.fetchArticle(this.props.match.params.id)
+        this.props.fetchArticle(this.props.match.params.id);
+        console.log('componentDidMount', this.state)
     }
 
     componentDidUpdate(prevProps) {
-        if(prevProps.article.title !== this.props.article.title) {
+        if(prevProps.article !== this.props.article) {
+            const {title, content, articleId, timestamp} = this.props.article;
+            this.setState({
+                title,
+                content,
+                articleId,
+                timestamp
+            })
+        }
+        console.log('componentDidUpdate', this.state)
+       /* if(prevProps.article.title !== this.props.article.title) {
             this.setState({
                 title: this.props.article.title
             })
@@ -69,6 +77,8 @@ class NewsEdit extends React.Component{
                 timestamp: this.props.article.timestamp
             })
         }
+
+        */
         /*if(prevProps.article.userName !== this.props.name) {
             this.setState({
                 userName: this.props.name
@@ -108,6 +118,7 @@ class NewsEdit extends React.Component{
             this.props.editArticle(newsData.articleId, newsData )
             history.push(`/news/${newsData.articleId}/edit`)
         }
+        console.log('handleSubmit', this.state)
     };
 
     handleChangeTitle = (event) => {
@@ -119,7 +130,7 @@ class NewsEdit extends React.Component{
             title: value,
             articleId: generateId
         });
-        console.log('handleTitle',this.state.title)
+        console.log('handleChangeTitle',this.state)
     };
     handleChangeContent = (event) => {
         const value = event.target.value;
@@ -128,12 +139,13 @@ class NewsEdit extends React.Component{
             timestamp: new Date(Date.now()).toLocaleString(),
             userName: this.props.name
         });
+        console.log('handleChangeContent',this.state)
     };
     render(){
         if(!this.props.article){
             return <div>Loading...</div>
         }
-        console.log('render Title',this.state.title)
+        console.log('render',this.state)
         return(
             <FormArticle
                 title={this.state.title}
@@ -147,6 +159,7 @@ class NewsEdit extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
+    console.log('mapStateToProps', state)
     return{
         article: state.article,
         name: state.auth.user.name
