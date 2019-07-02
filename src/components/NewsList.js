@@ -19,43 +19,44 @@ class NewsList extends React.Component{
     state = {
         showPopup: false
     };
-    togglePopup = (articleId) => {
+    showPopup = (articleId) => {
         this.setState({
-            showPopup: !this.state.showPopup
+            showPopup: true,
+            articleId: articleId
+        })
+
+        console.log(articleId)
+    };
+    closePopup = () => {
+        this.setState({
+            showPopup: false
         })
     };
+
     componentDidMount() {
         this.props.fetchNews();
     }
 
     renderNews() {
-        console.log('Render')
-        console.log('PROPS', this.props.news)
-        console.log('State', this.state)
         const { news } = this.props;
         const allNews = _.map(news, (value, key) => {
             return (
+
                 <div key={key}>
                     <div className="article-content">
-                        <div className="art-buttons">
-                            <Link to={`/news/${value.articleId}/edit`}>
-                                <i className="fas fa-pen"></i>
-                            </Link>
-                            {/*<Link to={`/news/${value.articleId}/delete`}>
-                                <i className="fa fa-times" aria-hidden="true"></i>
-                            </Link>*/}
-                            <button onClick={() => this.togglePopup(value.articleId)}>
-                                <i className="fa fa-times" aria-hidden="true"></i>
-                            </button>
-
-                            {this.state.showPopup ?
-                                <NewsDelete articleId={value.articleId}
-                                            closePopup={() => this.togglePopup(value.articleId)}/>
+                        {
+                            this.props.userId === value.userId ?
+                                <div className="art-buttons">
+                                    <Link to={`/news/${value.articleId}/edit`}>
+                                        <i className="fas fa-pen"></i>
+                                    </Link>
+                                    <button onClick={() => this.showPopup(value.articleId)}>
+                                        <i className="fa fa-times" aria-hidden="true"></i>
+                                    </button>
+                                </div>
                                 :
                                 null
-
-                            }
-                        </div>
+                        }
                         <h4>
                             <Link to={`/news/${value.articleId}`}>{value.title}</Link>
                         </h4>
@@ -77,6 +78,11 @@ class NewsList extends React.Component{
                 <div className="row">
                     <div className="col-md-6">
                         {this.renderNews()}
+                        {this.state.showPopup ?
+                            <NewsDelete articleId={this.state.articleId} closePopup={this.closePopup}/>
+                            :
+                            null
+                        }
                     </div>
                 </div>
                 {this.props.isSignedIn &&
@@ -94,7 +100,8 @@ class NewsList extends React.Component{
 const mapStateToProps = (state) => {
     return {
         news: state.news,
-        isSignedIn: state.auth.isSignedIn
+        isSignedIn: state.auth.isSignedIn,
+        userId: state.auth.user.userId
     };
 };
 export default connect(mapStateToProps, {fetchNews, fetchArticle})(NewsList)

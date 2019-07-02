@@ -32,7 +32,8 @@ h4 a:hover{
     top: 10px;
     right: 10px;
 }
-.art-buttons a{
+.art-buttons a,
+.art-buttons button{
     margin: 0 5px;
     border: 1px solid #ccc;
     border-radius: 50%;
@@ -47,6 +48,6 @@ h4 a:hover{
 .art-buttons a .fa-pen{
     color: #17a2b8;
 }
-.art-buttons a .fa-times{
+.art-buttons button .fa-times{
     color: #b71717;
 }

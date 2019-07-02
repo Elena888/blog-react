@@ -12,7 +12,7 @@ import history from './history'
 
 class App extends React.Component{
     render(){
-        {/*let routes = (
+        let routes = (
             <Switch>
                 <Route path='/' exact component={NewsList}/>
                 <Route path='/news/:id' exact component={NewsShow}/>
@@ -26,21 +26,19 @@ class App extends React.Component{
                     <Route path='/news/create' exact component={NewsCreate}/>
                     <Route path='/news/:id' exact component={NewsShow}/>
                     <Route path='/news/:id/edit' exact component={NewsEdit}/>
-                    <Route path='/news/:id/delete' exact component={NewsDelete}/>
                     <Redirect to="/"/>
                 </Switch>
-            )*/
+            )
         }
-    let routes = (
+    /*let routes = (
         <Switch>
             <Route path='/' exact component={NewsList}/>
             <Route path='/news/create' exact component={NewsCreate}/>
             <Route path='/news/:id/edit' exact component={NewsEdit}/>
             <Route path='/news/:id' exact component={NewsShow}/>
-            <Route path='/news/:id/delete' exact component={NewsDelete}/>
             <Redirect to="/"/>
         </Switch>
-    );
+    );*/
         return (
             <div>
                 <Router history={history}>
@@ -54,6 +52,7 @@ class App extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
+    console.log('mapStateToProps isSignIn', state.auth.isSignedIn)
     return {
         isSignIn: state.auth.isSignedIn
     }

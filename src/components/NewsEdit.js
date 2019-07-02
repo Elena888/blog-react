@@ -35,6 +35,7 @@ class NewsEdit extends React.Component{
             title: this.props.article.title,
             content: this.props.article.content,
             userName: this.props.name,
+            userId: this.props.userId,
             timestamp: this.props.article.timestamp,
             articleId: this.props.article.articleId,
             formErrors: []
@@ -90,7 +91,6 @@ class NewsEdit extends React.Component{
         event.preventDefault();
         const { title, content } = this.state;
 
-
         const formErrors = validate(title, content);
 
         if (Object.keys(formErrors).length > 0) {
@@ -101,6 +101,7 @@ class NewsEdit extends React.Component{
             title: this.state.title,
             content: this.state.content,
             userName: this.state.userName,
+            userId: this.state.userId,
             timestamp: this.state.timestamp,
             articleId: this.state.articleId
         };
@@ -137,7 +138,8 @@ class NewsEdit extends React.Component{
         this.setState({
             content: value,
             timestamp: new Date(Date.now()).toLocaleString(),
-            userName: this.props.name
+            userName: this.props.name,
+            userId: this.props.userId
         });
         console.log('handleChangeContent',this.state)
     };
@@ -162,7 +164,8 @@ const mapStateToProps = (state) => {
     console.log('mapStateToProps', state)
     return{
         article: state.article,
-        name: state.auth.user.name
+        name: state.auth.user.name,
+        userId: state.auth.user.userId
     }
 };
 

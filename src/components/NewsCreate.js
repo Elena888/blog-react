@@ -32,6 +32,7 @@ class NewsCreate extends React.Component{
         title: '',
         content: '',
         userName: null,
+        userId: null,
         timestamp: null,
         articleId: null,
         formErrors: []
@@ -51,6 +52,7 @@ class NewsCreate extends React.Component{
             title: this.state.title,
             content: this.state.content,
             userName: this.state.userName,
+            userId: this.state.userId,
             timestamp: this.state.timestamp,
             articleId: this.state.articleId
         };
@@ -72,7 +74,8 @@ class NewsCreate extends React.Component{
         this.setState({
             content: value,
             timestamp: new Date(Date.now()).toLocaleString(),
-            userName: this.props.name
+            userName: this.props.name,
+            userId: this.props.userId
         });
     };
     render(){
@@ -91,7 +94,8 @@ class NewsCreate extends React.Component{
 const mapStateToProps = (state) => {
     return {
         isSignIn: state.auth.isSignedIn,
-        name: state.auth.user.name
+        name: state.auth.user.name,
+        userId: state.auth.user.userId
     }
 };
 export default connect(mapStateToProps, {Sign_In, addNews})(NewsCreate)
