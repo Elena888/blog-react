@@ -6,7 +6,6 @@ import NewsList from './components/NewsList'
 import NewsShow from './components/NewsShow'
 import Header from './components/Header'
 import {connect} from 'react-redux'
-import {Sign_In, Sign_Out} from './actions'
 import history from './history'
 
 class App extends React.Component{
@@ -29,15 +28,7 @@ class App extends React.Component{
                 </Switch>
             )
         }
-    /*let routes = (
-        <Switch>
-            <Route path='/' exact component={NewsList}/>
-            <Route path='/news/create' exact component={NewsCreate}/>
-            <Route path='/news/:id/edit' exact component={NewsEdit}/>
-            <Route path='/news/:id' exact component={NewsShow}/>
-            <Redirect to="/"/>
-        </Switch>
-    );*/
+
         return (
             <div>
                 <Router history={history}>
@@ -51,9 +42,8 @@ class App extends React.Component{
     }
 }
 const mapStateToProps = (state) => {
-    console.log('mapStateToProps isSignIn', state.auth.isSignedIn)
     return {
         isSignIn: state.auth.isSignedIn
     }
 };
-export default connect(mapStateToProps,{Sign_In, Sign_Out} )(App)
+export default connect(mapStateToProps)(App)

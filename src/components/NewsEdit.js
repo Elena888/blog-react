@@ -3,34 +3,11 @@ import history from '../history'
 import {connect} from 'react-redux'
 import {editArticle, deleteArticle, createArticle, fetchArticle} from "../actions";
 import FormArticle from './formArticle'
+import {filter, validate} from '../inc/functions'
 
-function validate(title, content) {
-    const errors = [];
-    if (title.length === 0) {
-        errors.title = 'Title can\'t be empty';
-    }
-
-    if (content.length < 6) {
-        errors.content = 'Content should be at least 6 characters long'
-    }
-    return errors;
-}
-function filter(arr) {
-    for(var i = 0; i < arr.length; i++){
-
-        var symbols =  ["." , "#" , "$" , "[" , "]"]
-        for(var j = 0; j < symbols.length; j++){
-            if(arr[i] === symbols[j]){
-                arr.splice(i, 1);
-                i--;
-            }
-        }
-    }
-    return arr
-}
 class NewsEdit extends React.Component{
     constructor(props){
-        super(props)
+        super(props);
         this.state = {
             title: this.props.article.title,
             content: this.props.article.content,
@@ -58,33 +35,6 @@ class NewsEdit extends React.Component{
             })
         }
         console.log('componentDidUpdate', this.state)
-       /* if(prevProps.article.title !== this.props.article.title) {
-            this.setState({
-                title: this.props.article.title
-            })
-        }
-        if(prevProps.article.content !== this.props.article.content) {
-            this.setState({
-                content: this.props.article.content
-            })
-        }
-        if(prevProps.article.articleId !== this.props.article.articleId) {
-            this.setState({
-                articleId: this.props.article.articleId
-            })
-        }
-        if(prevProps.article.timestamp !== this.props.article.timestamp) {
-            this.setState({
-                timestamp: this.props.article.timestamp
-            })
-        }
-
-        */
-        /*if(prevProps.article.userName !== this.props.name) {
-            this.setState({
-                userName: this.props.name
-            })
-        }*/
     }
 
     handleSubmit = (event) => {
@@ -113,18 +63,13 @@ class NewsEdit extends React.Component{
             timestamp: this.state.timestamp,
             articleId: this.state.articleId
         };
-        //this.props.editArticle(newsData.articleId, newsData)
 
-        if(this.props.article.title === title)
-        {
-            //console.log("handleSubmit this.props.article.title === title");
-            this.props.editArticle(newsData.articleId, newsData )
+        if(this.props.article.title === title){
+            this.props.editArticle(newsData.articleId, newsData)
 
-        }
-        else{//title is different
-            //console.log("handleSubmit this.props.article.title !== title");
-            this.props.deleteArticle(this.props.article.articleId)
-            this.props.createArticle(newsData.articleId, newsData )
+        }else{
+            this.props.deleteArticle(this.props.article.articleId);
+            this.props.createArticle(newsData.articleId, newsData);
             history.push(`/news/${newsData.articleId}/edit`)
         }
 

@@ -2,14 +2,14 @@ import {databaseRef} from "../config/fbConfig";
 import history from '../history'
 import {CREATE_ARTICLE, FETCH_NEWS, FETCH_ARTICLE, SIGN_IN, SIGN_OUT, EDIT_ARTICLE, DELETE_ARTICLE} from "./types";
 
-export const Sign_In = (user) => {
+export const SignIn = (user) => {
     return {
         type: SIGN_IN,
         payload: user
     }
 };
 
-export const Sign_Out = () => {
+export const SignOut = () => {
     return {
         type: SIGN_OUT
     }

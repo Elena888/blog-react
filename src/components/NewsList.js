@@ -7,6 +7,10 @@ import NewsDelete from './NewsDelete'
 import '../styles/article.css'
 
 class NewsList extends React.Component{
+    state = {
+        showPopup: false
+    };
+
     truncate = (elem, limit, after) => {
         if (!elem || !limit) return;
         var content = elem.trim();
@@ -16,14 +20,11 @@ class NewsList extends React.Component{
         return elem;
     };
 
-    state = {
-        showPopup: false
-    };
     showPopup = (articleId) => {
         this.setState({
             showPopup: true,
             articleId: articleId
-        })
+        });
 
         console.log(articleId)
     };
@@ -41,7 +42,6 @@ class NewsList extends React.Component{
         const { news } = this.props;
         const allNews = _.map(news, (value, key) => {
             return (
-
                 <div key={key}>
                     <div className="article-content">
                         {
@@ -78,19 +78,17 @@ class NewsList extends React.Component{
                 <div className="row">
                     <div className="col-md-6">
                         {this.renderNews()}
-                        {this.state.showPopup ?
+                        {this.state.showPopup &&
                             <NewsDelete articleId={this.state.articleId} closePopup={this.closePopup}/>
-                            :
-                            null
                         }
                     </div>
                 </div>
                 {this.props.isSignedIn &&
-                <div className="row">
-                    <div className="col-md-12">
-                        <Link to="/news/create" className="btn btn-info">Create news</Link>
+                    <div className="row">
+                        <div className="col-md-12">
+                            <Link to="/news/create" className="btn btn-info">Create news</Link>
+                        </div>
                     </div>
-                </div>
                 }
             </div>
         )
