@@ -11,15 +11,13 @@ class NewsEdit extends React.Component{
         this.state = {
             title: this.props.article.title,
             content: this.props.article.content,
-            userName: this.props.name,
-            userId: this.props.userId,
-            timestamp: new Date(Date.now()).toLocaleString(),
-            articleId: this.props.article.articleId,
             formErrors: [],
-            submitMessage: ''
+            successfulMessage: ''
         };
         console.log('Constructor', this.state)
     }
+    articleId = '';
+
     componentDidMount(){
         this.props.fetchArticle(this.props.match.params.id);
         console.log('componentDidMount', this.state)
@@ -46,21 +44,18 @@ class NewsEdit extends React.Component{
         if (Object.keys(formErrors).length > 0) {
             this.setState({
                 formErrors,
-                submitMessage: ''
+                successfulMessage: ''
             });
             return;
         }else{
             this.setState({
                 formErrors: [],
-                submitMessage: 'You successfully edited article'
+                successfulMessage: 'You successfully edited article'
             });
         }
         let newsData = {
             title: this.state.title,
             content: this.state.content,
-            userName: this.state.userName,
-            userId: this.state.userId,
-            timestamp: this.state.timestamp,
             articleId: this.state.articleId
         };
 
@@ -90,10 +85,7 @@ class NewsEdit extends React.Component{
     handleChangeContent = (event) => {
         const value = event.target.value;
         this.setState({
-            content: value,
-            timestamp: new Date(Date.now()).toLocaleString(),
-            userName: this.props.name,
-            userId: this.props.userId
+            content: value
         });
         console.log('handleChangeContent',this.state)
     };
@@ -112,10 +104,10 @@ class NewsEdit extends React.Component{
                 handleChangeContent={this.handleChangeContent}
                 handleChangeTitle={this.handleChangeTitle}
             />
-                {this.state.submitMessage &&
+                {this.state.successfulMessage &&
                     <div className="container">
                         <div className="row" style={{marginTop: '30px'}}>
-                            <h5 className="alert alert-success">{this.state.submitMessage}</h5>
+                            <h5 className="alert alert-success">{this.state.successfulMessage}</h5>
                         </div>
                     </div>
                 }
@@ -126,9 +118,7 @@ class NewsEdit extends React.Component{
 const mapStateToProps = (state) => {
     console.log('mapStateToProps', state)
     return{
-        article: state.article,
-        name: state.auth.user.name,
-        userId: state.auth.user.userId
+        article: state.article
     }
 };
 

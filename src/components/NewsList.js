@@ -4,6 +4,7 @@ import {connect} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {fetchNews, fetchArticle} from '../actions/index'
 import NewsDelete from './NewsDelete'
+import moment from 'moment'
 import '../styles/article.css'
 
 class NewsList extends React.Component{
@@ -40,6 +41,7 @@ class NewsList extends React.Component{
 
     renderNews() {
         const { news } = this.props;
+        console.log('news', news)
         const allNews = _.map(news, (value, key) => {
             return (
                 <div key={key}>
@@ -61,7 +63,7 @@ class NewsList extends React.Component{
                             <Link to={`/news/${value.articleId}`}>{value.title}</Link>
                         </h4>
                         <div className="article-author">
-                            <h6>{value.userName}  <span>{value.timestamp}</span></h6>
+                            <h6>{value.userName}  <span>{moment(+value.timestamp).calendar()}</span></h6>
                         </div>
                         <p>{this.truncate(value.content, 50, '...')}</p>
                     </div>

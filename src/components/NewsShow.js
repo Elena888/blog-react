@@ -1,6 +1,7 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {fetchArticle} from '../actions/index'
+import moment from 'moment'
 
 class NewsShow extends React.Component{
     componentDidMount(){
@@ -18,7 +19,7 @@ class NewsShow extends React.Component{
                         <div className="article-content">
                             <h1>{title}</h1>
                             <div className="article-author">
-                                <h6>{userName}  <span>{timestamp}</span></h6>
+                                <h6>{userName}  <span>{moment(+timestamp).calendar()}</span></h6>
                             </div>
                             <p>{content}</p>
                         </div>

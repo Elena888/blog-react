@@ -1,14 +1,25 @@
-import {CREATE_ARTICLE, DELETE_ARTICLE, EDIT_ARTICLE, FETCH_ARTICLE, FETCH_NEWS} from "../actions/types";
+import _ from 'lodash'
+import {
+    CREATE_ARTICLE_ERROR,
+    CREATE_ARTICLE_SUCCESS,
+    DELETE_ARTICLE,
+    EDIT_ARTICLE_SUCCESS,
+    EDIT_ARTICLE_ERROR,
+    FETCH_ARTICLE,
+    FETCH_NEWS} from "../actions/types";
+
 const initialState = {
         content: '',
         timestamp: '',
         title: '',
-        userName: ''
+        userName: '',
+        errorMessage: null
     };
+
 export const news = (state = [], action) => {
     switch (action.type){
         case FETCH_NEWS:
-            return action.payload;
+            return { ...state, ..._.mapKeys(action.payload, 'timestamp')};
         default:
             return state;
     }
@@ -19,14 +30,50 @@ export const article =  (state = initialState, action) => {
         case FETCH_ARTICLE:
             //console.log(action.payload)
             //to do
-            return action.payload
-        case CREATE_ARTICLE:
-            return action.payload;
-        case EDIT_ARTICLE:
-            //console.log('edit', action.payload)
-            return action.payload;
+            return {
+            ...state,
+            timestamp: action.payload.timestamp,
+            title: action.payload.title,
+            content: action.payload.content,
+            articleId: action.payload.articleId,
+            userName: action.payload.userName,
+            userId: action.payload.userId,
+            errorMessage: null
+        };
+
+        case CREATE_ARTICLE_SUCCESS:
+            return {
+                ...state,
+                timestamp: action.payload.timestamp,
+                title: action.payload.title,
+                content: action.payload.content,
+                articleId: action.payload.articleId,
+                userName: action.payload.userName,
+                userId: action.payload.userId,
+                errorMessage: null
+            };
+
+        case CREATE_ARTICLE_ERROR:
+            return { ...state, errorMessage: action.payload};
+
+        case EDIT_ARTICLE_SUCCESS:
+            console.log('TRUE edit success')
+            return {
+                ...state,
+                timestamp: action.payload.timestamp,
+                title: action.payload.title,
+                content: action.payload.content,
+                articleId: action.payload.articleId,
+                errorMessage: null
+            };
+
+        case EDIT_ARTICLE_ERROR:
+            console.log('edit error')
+            return { ...state, errorMessage: action.payload};
+
         case DELETE_ARTICLE:
             return state;
+
         default:
             return state;
     }

@@ -1,6 +1,14 @@
 import {databaseRef} from "../config/fbConfig";
 import history from '../history'
-import {CREATE_ARTICLE, FETCH_NEWS, FETCH_ARTICLE, SIGN_IN, SIGN_OUT, EDIT_ARTICLE, DELETE_ARTICLE} from "./types";
+import {
+    CREATE_ARTICLE_ERROR,
+    CREATE_ARTICLE_SUCCESS,
+    FETCH_NEWS, FETCH_ARTICLE,
+    SIGN_IN,
+    SIGN_OUT,
+    EDIT_ARTICLE_SUCCESS,
+    EDIT_ARTICLE_ERROR,
+    DELETE_ARTICLE} from "./types";
 
 export const SignIn = (user) => {
     return {
@@ -22,6 +30,8 @@ export const fetchNews = () => async dispatch => {
             snapshot.forEach(function(child) {
                 data.unshift(child.val());
             });
+            console.log('snapshot', snapshot.val())
+            console.log('data', data)
             dispatch({
                 type: FETCH_NEWS,
                 payload: data
@@ -30,16 +40,29 @@ export const fetchNews = () => async dispatch => {
     );
 };
 
-export const createArticle = (articleId,newArticle) => async (dispatch) => {
+export const createArticle = (articleId, newArticle) => async (dispatch, getState) => {
+    const timestamp = new Date().getTime();
+    const userName = getState().auth.user.name;
+    const userId = getState().auth.user.userId;
+
     databaseRef.ref('news/' + articleId)
-        .set(newArticle)
-        .then(() => {
+        .set({
+            ...newArticle,
+            timestamp,
+            userName,
+            userId
+        }).then(() => {
                 dispatch({
-                    type: CREATE_ARTICLE,
+                    type: CREATE_ARTICLE_SUCCESS,
                     payload: newArticle
                 })
             }
-        );
+        ).catch((err) => {
+            dispatch({
+                type: CREATE_ARTICLE_ERROR,
+                payload: err
+            })
+    });
     history.push('/')
 };
 
@@ -55,22 +78,28 @@ export const fetchArticle = (articleId) => async dispatch => {
         });
 };
 
-export const editArticle = (articleId, newArticle) => async dispatch => {
+export const editArticle = (articleId, newArticle) => async (dispatch, getState) => {
+    const timestamp = new Date().getTime();
+    const userName = getState().auth.user.name;
+    const userId = getState().auth.user.userId;
     databaseRef.ref('news/' + articleId)
-        .set(newArticle)
-        .then(() => {
+        .set({
+            ...newArticle,
+            timestamp,
+            userName,
+            userId
+        }).then(() => {
                 dispatch({
-                    type: EDIT_ARTICLE,
+                    type: EDIT_ARTICLE_SUCCESS,
                     payload: newArticle
                 })
-            },
-            (error) => {
-                dispatch({
-                    type: EDIT_ARTICLE,
-                    payload: error
-                })
             }
-        )
+        ).catch((error) => {
+            dispatch({
+                type: EDIT_ARTICLE_ERROR,
+                payload: error
+            })
+    })
 };
 export const deleteArticle = (articleId) => async dispatch => {
     databaseRef.ref('news/' + articleId)

@@ -8,12 +8,10 @@ class NewsCreate extends React.Component{
     state = {
         title: '',
         content: '',
-        userName: null,
-        userId: null,
-        timestamp: null,
-        articleId: null,
         formErrors: []
     };
+
+    articleId = '';
 
     handleSubmit = (event) => {
         event.preventDefault();
@@ -28,10 +26,7 @@ class NewsCreate extends React.Component{
         let newsData = {
             title: this.state.title,
             content: this.state.content,
-            userName: this.state.userName,
-            userId: this.state.userId,
-            timestamp: this.state.timestamp,
-            articleId: this.state.articleId
+            articleId: this.articleId
         };
         this.props.createArticle(newsData.articleId, newsData)
     };
@@ -40,20 +35,15 @@ class NewsCreate extends React.Component{
         const value = event.target.value;
         let generateId = value.split(' ');
         generateId = filter(generateId);
-        generateId = generateId.join('-') + '-' + Math.random().toString(36).substr(2, 5)
+        this.articleId = generateId.join('-') + '-' + Math.random().toString(36).substr(2, 5)
         this.setState({
-            title: value,
-            articleId: generateId
+            title: value
         })
     };
     handleChangeContent = (event) => {
         const value = event.target.value;
         this.setState({
-            content: value,
-            //Can I add here this states????????????????????????????
-            timestamp: new Date(Date.now()).toLocaleString(),
-            userName: this.props.name,
-            userId: this.props.userId
+            content: value
         });
     };
     render(){
@@ -69,11 +59,5 @@ class NewsCreate extends React.Component{
         )
     }
 }
-const mapStateToProps = (state) => {
-    return {
-        isSignIn: state.auth.isSignedIn,
-        name: state.auth.user.name,
-        userId: state.auth.user.userId
-    }
-};
-export default connect(mapStateToProps, {createArticle})(NewsCreate)
+
+export default connect(null, {createArticle})(NewsCreate)
