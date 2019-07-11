@@ -3,7 +3,8 @@ import history from '../history'
 import {
     CREATE_ARTICLE_ERROR,
     CREATE_ARTICLE_SUCCESS,
-    FETCH_NEWS, FETCH_ARTICLE,
+    FETCH_NEWS,
+    FETCH_ARTICLE,
     SIGN_IN,
     SIGN_OUT,
     EDIT_ARTICLE_SUCCESS,
@@ -24,20 +25,13 @@ export const SignOut = () => {
 };
 
 export const fetchNews = () => async dispatch => {
-    databaseRef.ref('news').orderByChild('timestamp').on('value',
-        function (snapshot) {
-            let data = [];
-            snapshot.forEach(function(child) {
-                data.unshift(child.val());
-            });
-            console.log('snapshot', snapshot.val())
-            console.log('data', data)
+    databaseRef.ref('news').once('value')
+        .then((snapshot) => {
             dispatch({
                 type: FETCH_NEWS,
-                payload: data
+                payload: snapshot.val()
             })
-        }
-    );
+        })
 };
 
 export const createArticle = (articleId, newArticle) => async (dispatch, getState) => {
@@ -106,7 +100,8 @@ export const deleteArticle = (articleId) => async dispatch => {
         .remove()
         .then(() => {
             dispatch({
-                type: DELETE_ARTICLE
+                type: DELETE_ARTICLE,
+                payload: articleId
             });
         })
 };

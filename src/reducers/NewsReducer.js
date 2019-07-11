@@ -19,7 +19,9 @@ const initialState = {
 export const news = (state = [], action) => {
     switch (action.type){
         case FETCH_NEWS:
-            return { ...state, ..._.mapKeys(action.payload, 'timestamp')};
+            return { ...state, ..._.mapKeys(action.payload, 'articleId')};
+        case DELETE_ARTICLE:
+            return  _.omit(state, action.payload)
         default:
             return state;
     }
@@ -70,9 +72,6 @@ export const article =  (state = initialState, action) => {
         case EDIT_ARTICLE_ERROR:
             console.log('edit error')
             return { ...state, errorMessage: action.payload};
-
-        case DELETE_ARTICLE:
-            return state;
 
         default:
             return state;

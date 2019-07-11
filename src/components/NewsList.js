@@ -41,8 +41,8 @@ class NewsList extends React.Component{
 
     renderNews() {
         const { news } = this.props;
-        console.log('news', news)
-        const allNews = _.map(news, (value, key) => {
+        const orderNews = _.orderBy(news, 'timestamp', 'desc');
+        const allNews = _.map(orderNews, (value, key) => {
             return (
                 <div key={key}>
                     <div className="article-content">
