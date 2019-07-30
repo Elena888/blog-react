@@ -2,6 +2,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## Demo link
 
 https://react-blog-243411.web.app/
+Sign In (Log In) to create news
 
 ## Available Scripts
 
